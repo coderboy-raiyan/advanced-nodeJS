@@ -6,9 +6,11 @@ const path = require("path");
 const adminRouter = require("./routes/admin/admin.routes");
 const shopRouter = require("./routes/shop/shop.routes");
 const server = http.createServer(app);
+const bodyParser = require("body-parser");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/admin", adminRouter);
 app.use(shopRouter);
