@@ -5,12 +5,12 @@ const path = require("path");
 const products = [];
 
 adminRouter.get("/add-product", (req, res, next) => {
-  res.sendFile(path.join(rootDir, "views", "add-product.html"));
+  res.render("add-product");
 });
 
 adminRouter.post("/add-product", (req, res) => {
-  console.log(req.body);
+  products.push(req.body);
   res.redirect("/");
 });
 
-module.exports = adminRouter;
+module.exports = { adminRouter, products };
