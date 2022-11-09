@@ -5,7 +5,14 @@ const { products } = require("../admin/admin.routes");
 
 shopRouter.get("/", (req, res) => {
   console.log(products);
-  res.render("shop");
+  res.render("shop", {
+    prods: products,
+    pageTitle: "Shop",
+    path: "/",
+    hasProducts: products.length > 0,
+    activeShop: true,
+    productCSS: true,
+  });
 });
 
 module.exports = shopRouter;
