@@ -1,6 +1,6 @@
-const products = [];
+const { Product } = require('../../models/product.model');
 
-async function getAddProduct(req, res, next) {
+async function getAddProduct(req, res) {
     try {
         res.render('add-product', {
             pageTitle: 'Add Product',
@@ -13,15 +13,17 @@ async function getAddProduct(req, res, next) {
         console.log(error);
     }
 }
-async function postAddProduct(req, res, next) {
+async function postAddProduct(req, res) {
     try {
-        products.push(req.body);
+        const product = new Product({ title: req.body.title });
+        product.save();
         res.redirect('/');
     } catch (error) {
         console.log(error);
     }
 }
-async function getProducts(req, res, next) {
+async function getProducts(req, res) {
+    const products = Product.fetchAll();
     try {
         res.render('shop', {
             prods: products,
