@@ -24,7 +24,7 @@ async function postAddProduct(req, res) {
 }
 async function getProducts(req, res) {
     const products = await Product.fetchAll();
-    console.log(products);
+
     try {
         res.render('shop', {
             prods: products,

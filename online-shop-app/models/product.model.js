@@ -13,7 +13,6 @@ class Product {
         const readStream = fs.createReadStream(path.join(rootDir, 'data', 'products.json'));
         const productData = [];
         readStream.on('data', (chunk) => {
-            console.log(JSON.parse(chunk));
             productData.push(...JSON.parse(chunk));
         });
         readStream.on('end', () => {

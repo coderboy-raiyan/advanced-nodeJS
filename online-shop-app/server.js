@@ -5,6 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const path = require('path');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const { adminRouter } = require('./routes/admin/admin.routes');
 const shopRouter = require('./routes/shop/shop.routes');
 
@@ -14,6 +15,7 @@ const get404 = require('./controllers/error.controller');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(morgan('dev'));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
