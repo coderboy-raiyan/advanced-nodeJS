@@ -1,6 +1,5 @@
-const { getProducts } = require('./product.controller');
-
 const shopRouter = require('express').Router();
+const { getProducts } = require('./product.controller');
 
 shopRouter.get('/', getProducts);
 
