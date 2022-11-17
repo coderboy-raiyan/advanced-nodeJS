@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 
-import Post from '../../components/Feed/Post/Post';
 import Button from '../../components/Button/Button';
-import FeedEdit from '../../components/Feed/FeedEdit/FeedEdit';
-import Input from '../../components/Form/Input/Input';
-import Paginator from '../../components/Paginator/Paginator';
-import Loader from '../../components/Loader/Loader';
 import ErrorHandler from '../../components/ErrorHandler/ErrorHandler';
+import FeedEdit from '../../components/Feed/FeedEdit/FeedEdit';
+import Post from '../../components/Feed/Post/Post';
+import Input from '../../components/Form/Input/Input';
+import Loader from '../../components/Loader/Loader';
+import Paginator from '../../components/Paginator/Paginator';
 import './Feed.css';
 
 class Feed extends Component {
@@ -50,7 +50,7 @@ class Feed extends Component {
             page--;
             this.setState({ postPage: page });
         }
-        fetch('URL')
+        fetch(`${process.env.REACT_APP_BASE_URL}/feed/posts`)
             .then((res) => {
                 if (res.status !== 200) {
                     throw new Error('Failed to fetch posts.');
