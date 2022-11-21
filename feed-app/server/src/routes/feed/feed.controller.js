@@ -27,6 +27,10 @@ async function createPost(req, res) {
                 _id: new Date().toISOString(),
                 title,
                 content,
+                creator: {
+                    name: 'Elon musk',
+                },
+                createdAt: new Date(),
             },
         });
     } catch (error) {
