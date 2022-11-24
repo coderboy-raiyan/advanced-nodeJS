@@ -1,3 +1,5 @@
+const Post = require('../../models/Post.model');
+
 async function getPosts(req, res) {
     try {
         res.status(200).json({
@@ -21,19 +23,23 @@ async function getPosts(req, res) {
 async function createPost(req, res) {
     const { title, content } = req.body;
     try {
-        res.status(201).json({
-            message: 'Post created Successfully',
-            post: {
-                _id: new Date().toISOString(),
-                title,
-                content,
-                creator: {
-                    name: 'Elon musk',
-                },
-                createdAt: new Date(),
+        const post = await Post.create({
+            title,
+            content,
+            imgUrl: 'images/duck.jpeg',
+            creator: {
+                name: 'Elon musk',
             },
         });
+        console.log(post);
+        res.status(201).json({
+            message: 'Post created Successfully',
+            post,
+        });
     } catch (error) {
+        res.status(500).json({
+            message: 'Internal Server Error',
+        });
         console.log(error);
     }
 }
