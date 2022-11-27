@@ -1,26 +1,20 @@
+/* eslint-disable consistent-return */
 const Post = require('../../models/Post.model');
 
-async function getPosts(req, res) {
+async function getPosts(req, res, next) {
     try {
-        res.status(200).json({
-            posts: [
-                {
-                    _id: 1,
-                    title: 'First Post',
-                    content: 'It is my first post',
-                    imageUrl: 'images/fifa.jpeg',
-                    creator: {
-                        name: 'Elon musk',
-                    },
-                    createdAt: new Date(),
-                },
-            ],
+        const posts = await Post.find({});
+        return res.status(200).json({
+            posts,
         });
     } catch (error) {
-        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }
-async function createPost(req, res) {
+async function createPost(req, res, next) {
     const { title, content } = req.body;
     try {
         const post = await Post.create({
@@ -32,15 +26,32 @@ async function createPost(req, res) {
             },
         });
         console.log(post);
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Post created Successfully',
             post,
         });
     } catch (error) {
-        res.status(500).json({
-            message: 'Internal Server Error',
-        });
-        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }
-module.exports = { getPosts, createPost };
+
+async function getPost(req, res, next) {
+    try {
+        const post = await Post.findById(req.params.postId);
+
+        if (!post) {
+            return res.status(400).json({ message: 'No post found' });
+        }
+        return res.status(200).json({ message: 'Post fetched', post });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
+module.exports = { getPosts, createPost, getPost };
