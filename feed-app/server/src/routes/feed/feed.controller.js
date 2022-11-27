@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const Post = require('../../models/Post.model');
 
 async function getPosts(req, res, next) {
@@ -15,17 +14,23 @@ async function getPosts(req, res, next) {
     }
 }
 async function createPost(req, res, next) {
+    console.log(req.file);
+
+    if (!req.file) {
+        return res.status(422).json({ message: 'No image provided' });
+    }
+
     const { title, content } = req.body;
     try {
         const post = await Post.create({
             title,
             content,
-            imgUrl: 'images/duck.jpeg',
+            imgUrl: `images/${req.file.filename}`,
             creator: {
                 name: 'Elon musk',
             },
         });
-        console.log(post);
+
         return res.status(201).json({
             message: 'Post created Successfully',
             post,
