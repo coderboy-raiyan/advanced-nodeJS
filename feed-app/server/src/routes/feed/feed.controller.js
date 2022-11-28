@@ -65,14 +65,9 @@ async function updatePost(req, res, next) {
         const { postId } = req.params;
         const { title, content } = req.body;
 
-        let imageUrl = req.body.image;
-
+        let imageUrl;
         if (req.file) {
             imageUrl = `images/${req.file.filename}`;
-        }
-
-        if (!imageUrl) {
-            return res.status(422).json({ message: 'No file picked' });
         }
 
         const post = await Post.findById(postId);
@@ -81,13 +76,12 @@ async function updatePost(req, res, next) {
             return res.status(404).json({ message: 'Could not find post' });
         }
 
-        if (imageUrl !== post.imgUrl) {
-            clearImage(post.imgUrl);
-        }
-
         post.title = title;
         post.content = content;
-        post.imgUrl = imageUrl;
+        if (req.file) {
+            clearImage(post.imgUrl);
+            post.imgUrl = imageUrl;
+        }
 
         const result = await post.save();
 
