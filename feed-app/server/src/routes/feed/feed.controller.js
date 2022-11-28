@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define */
+/* eslint-disable no-underscore-dangle */
 const path = require('path');
 const fs = require('fs');
 const Post = require('../../models/Post.model');
@@ -94,6 +94,29 @@ async function updatePost(req, res, next) {
     }
 }
 
+async function deletePost(req, res, next) {
+    try {
+        const { postId } = req.params;
+
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        clearImage(post.imgUrl);
+
+        const deletedPost = await Post.findByIdAndRemove(post._id);
+
+        return res.status(200).json({ message: 'Post has been deleted', deletedPost });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
 function clearImage(filePath) {
     if (filePath) {
         filePath = path.join(__dirname, '..', '..', filePath);
@@ -106,4 +129,5 @@ module.exports = {
     createPost,
     getPost,
     updatePost,
+    deletePost,
 };
