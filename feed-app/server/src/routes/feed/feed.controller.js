@@ -5,9 +5,17 @@ const Post = require('../../models/Post.model');
 
 async function getPosts(req, res, next) {
     try {
-        const posts = await Post.find({});
+        const currentPage = req.query.page || 1;
+        const perPage = 2;
+
+        const totalItems = await Post.find().countDocuments();
+        const posts = await Post.find()
+            .skip((currentPage - 1) * perPage)
+            .limit(perPage);
+
         return res.status(200).json({
             posts,
+            totalItems,
         });
     } catch (error) {
         if (!error.statusCode) {
